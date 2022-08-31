@@ -3,6 +3,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import static weather.Current.currentWeather;
+import  static weather.Tomorrow.tomorrowWeather;
 
 public class Weather {
 
@@ -13,26 +14,37 @@ public class Weather {
         return scanner.next();
     }
 
+    public static void forecastCondition(String day)throws Exception {
+        if (Objects.equals(day, "current")){
+            String[] cur = currentWeather();
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\nWeather on today:\n"+ cur[0]+"\n"+cur[1]
+                    +"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        } else if (Objects.equals(day, "two")) {
+            String[] cur = currentWeather();
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\nWeather on today:\n"+ cur[0]+"\n"+cur[1]
+                    +"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            System.out.println("Enter a city for tomorrow's weather forecast");
+            String[] tom = tomorrowWeather();
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\nWeather on tomorrow:"+ tom[0]+"\n"+tom[1]
+                    +"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        } else{
+            String[] tom = tomorrowWeather();
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\nWeather on tomorrow:\n"+ tom[0]+"\n"+tom[1]
+                    +"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        }
+    }
+
 
 
     public static  void main(String[] args) throws Exception  {
         /*ввод данных для определения текущей погода или на завтрашний день.
-        Можно ввести три значения: current, current and tomorrow, tomorrow.
+        Можно ввести три значения: current, two, tomorrow.
          */
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Which weather forecast you want to see: current or tomorrow?");
+        System.out.println("Which weather forecast you want to see: current, tomorrow or two days?");
         String day = scanner.next();
 
-        if (Objects.equals(day, "current")){
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n" +
-                    "Current weather in the city:\n"+ currentWeather()+
-                    "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        } else if (Objects.equals(day, "current and tomorrow")) {
-
-            currentWeather();
-        } else{
-            System.out.println("Sorry, forecast for tomorrow is temporarily unavailable");
-        }
+        forecastCondition(day);
 
 
 
