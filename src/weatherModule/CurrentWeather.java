@@ -20,7 +20,8 @@ public class CurrentWeather {
     private String sendGet(String cityName) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&units=metric&lang=en&appid=45d8535b361a7326ac202430c9bb89b3"))
+                .uri(URI.create("https://api.openweathermap.org/data/2.5/weather?q="+cityName+
+                        "&units=metric&lang=en&appid=45d8535b361a7326ac202430c9bb89b3"))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
