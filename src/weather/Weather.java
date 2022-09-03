@@ -41,7 +41,7 @@ public class Weather {
         Можно ввести три значения: current, two, tomorrow.
          */
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Which weather forecast you want to see: current, tomorrow or two days?");
+        System.out.println("Which the weather forecast do you want to see: current, tomorrow or two days?");
         String day = scanner.next();
 
         forecastCondition(day);
