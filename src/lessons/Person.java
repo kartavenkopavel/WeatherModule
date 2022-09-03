@@ -17,7 +17,7 @@ public class Person {
         int yob2 = 1993;
 
         System.out.println("Если человек родился в "+yob+
-                " году, то его возраст - разница между 2022 и "+yob);
+                " году, то его возраст - разница между " + currentYear() + " и "+yob);
 
 
         System.out.println("Если человек родился в "+yob2+
