@@ -16,8 +16,9 @@ public class TomorrowWeather {
         String cityName = scanner.next();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                //Параметр cnt может быть равным от 1 до 16. cnt=5 - отображает погоду на 12ч c интервалами по 3ч от текущей.
-                .uri(URI.create("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=metric&lang=en&appid=45d8535b361a7326ac202430c9bb89b3&cnt=5"))
+                //Параметр cnt может быть равным от 1 до 16. cnt=8 - отображает погоду через 24ч c интервалами по 3ч от текущей.
+                .uri(URI.create("https://api.openweathermap.org/data/2.5/forecast?q="+cityName+
+                        "&units=metric&lang=en&appid=45d8535b361a7326ac202430c9bb89b3&cnt=8"))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -33,23 +34,19 @@ public class TomorrowWeather {
         TomorrowWeather object = new TomorrowWeather();//объявление экземпляра класса
 
         String json = object.sendGet();//запись ответа в переменную типа String
-        /*Для упрощения работы с json удаляем лишние данные из тела ответа и перезаписываем в новую переменую
-            пока не получим данные о последнем временном интервале*/
-        String subJson = json.substring(json.indexOf("},{"),json.indexOf("\"sunset\""));
-        String subJson2 = subJson.substring(subJson.indexOf("\"},{"),subJson.indexOf("\"sunrise\""));
-        String subJson3 = subJson2.substring(subJson2.indexOf("0\"},{"),subJson2.indexOf("zone\""));
-        String subJson4 = subJson3.substring(subJson3.indexOf("00\"},{"),subJson3.indexOf("\"time"));
-        String newJson = subJson4.substring(subJson4.indexOf("{"),subJson4.indexOf("],\"city\""));
 
-        JSONObject obj = new JSONObject(newJson);//присвоение нового json в переменную типа JSONObject
+        JSONObject obj = new JSONObject(json);
+        JSONArray list = obj.getJSONArray("list");//в body list содержит массив из json
+        JSONObject newJson = list.optJSONObject(7);//последний элемент массива записываем в новую переменную
+
         //парсинг переменной типа JSONObject
-        String dateTime = obj.getString("dt_txt");
-        int temp = obj.getJSONObject("main").getInt("temp");
-        int feel = obj.getJSONObject("main").getInt("feels_like");
-        int humidity = obj.getJSONObject("main").getInt("humidity");
-        double windSpeed = obj.getJSONObject("wind").getDouble("speed");
+        String dateTime = newJson.getString("dt_txt");
+        int temp = newJson.getJSONObject("main").getInt("temp");
+        int feel = newJson.getJSONObject("main").getInt("feels_like");
+        int humidity = newJson.getJSONObject("main").getInt("humidity");
+        double windSpeed = newJson.getJSONObject("wind").getDouble("speed");
 
-        JSONArray weather = obj.getJSONArray("weather");
+        JSONArray weather = newJson.getJSONArray("weather");
         for (int i = 0; i < weather.length(); i++) {
             String main = weather.getJSONObject(i).getString("main");
             String description = weather.getJSONObject(i).getString("description");
@@ -60,7 +57,6 @@ public class TomorrowWeather {
                     "\nFEELS LIKE  \uD83C\uDF21 "+feel+"°C\t\tWIND     \uD83C\uDF2C "+windSpeed+"m/s" +
                     "\n--------------------------------------------------");
         }
-
     }
 
 }
